@@ -1,51 +1,31 @@
-var irc = require('irc'),
-printf = require('printf'),
+var printf = require('printf'),
 keyHandler = require('./keyHandler.js'),
-config = require('./config.js');
-
-var client = new irc.Client(config.server, config.nick, {
-    channels: [config.channel],
-    port: config.port || 6667,
-    sasl: false,
-    nick: config.nick,
-    userName: config.nick,
-    password: config.password,
-    //This has to be false, since SSL in NOT supported by twitch IRC (anymore?)
-    // see: http://help.twitch.tv/customer/portal/articles/1302780-twitch-irc
-    secure: false,
-    floodProtection: config.floodProtection || false,
-    floodProtectionDelay: config.floodProtectionDelay || 100,
-    autoConnect: false,
-    autoRejoin: true
+config = require('./config.js'),
+socket = require('socket.io-client')('http://localhost:8090');
+socket.on('connect', function(){
+	console.log('Connected to Socket.IO!');
 });
 
-var commandRegex = config.regexCommands ||
-new RegExp('^(' + config.commands.join('|') + ')$', 'i');
-
-client.addListener('message' + config.channel, function(from, message) {
-    if (message.match(commandRegex)) {
-
-        if (config.printToConsole) {
-            //format console output if needed
-            var maxName = config.maxCharName,
-            maxCommand = config.maxCharCommand,
-            logFrom = from.substring(0, maxName),
-            logMessage = message.substring(0, 6).toLowerCase();
-            //format log
-            console.log(printf('%-' + maxName + 's % ' + maxCommand + 's',
-                logFrom, logMessage));
-        }
-
-        // Should the message be sent the program?
-        if (config.sendKey) {
-            keyHandler.sendKey(message.toLowerCase());
-        }
-    }
+socket.on('charup', function(data) {
+	switch(data) {
+		case 38:
+			keyHandler.sendKey("up");
+			break;
+		case 40:
+			keyHandler.sendKey("down");
+			break;
+		case 37:
+			keyHandler.sendKey("left");
+			break;
+		case 39:
+			keyHandler.sendKey("right");
+			break;
+		default:
+			keyHandler.sendKey("up");
+			break;
+	}
+    
+	console.log(typeof data);
 });
 
-client.addListener('error', function(message) {
-    console.log('error: ', message);
-});
-
-client.connect();
 console.log('Connecting...');

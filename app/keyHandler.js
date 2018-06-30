@@ -50,6 +50,7 @@ function sendKey(command) {
                 // "VisualBoyAdvance"
                 // "DeSmuME 0.9.10 x64"
                 exec('key.py' + '  ' + config.programName + ' ' + key);
+				console.log(key);
             }
         }
     }

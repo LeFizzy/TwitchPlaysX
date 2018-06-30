@@ -4,19 +4,15 @@ var nconf = require('nconf').argv().env().file({ file:'config.json' });
 var commands = [
     'left', 'right', 'up', 'down',
     'start', 'select',
-    'a', 'b',
-    'democracy', 'anarchy'
+    'a', 'b'
 ];
 
-var username = process.env.TWITCH_USERNAME || nconf.get('TWITCH_USERNAME');
-var oauth = process.env.TWITCH_OAUTH || nconf.get('TWITCH_OAUTH');
-var channel = process.env.TWITCH_CHANNEL || nconf.get('TWITCH_CHANNEL');
 var os = process.env.CONFIG_OS || nconf.get('CONFIG_OS');
-var programName = process.env.CONFIG_PROGRAM_NAME || nconf.get('CONFIG_PROGRAM_NAME');
+//var programName = process.env.CONFIG_PROGRAM_NAME || nconf.get('CONFIG_PROGRAM_NAME');
+var programName = '8BitMMO';
 var maxCharName = process.env.CONFIG_MAX_CHAR_NAME || nconf.get('CONFIG_MAX_CHAR_NAME');
 var maxCharCommand = process.env.CONFIG_MAX_CHAR_COMMAND || nconf.get('CONFIG_MAX_CHAR_COMMAND');
 var sendKey = process.env.CONFIG_SEND_KEY || nconf.get('CONFIG_SEND_KEY');
-var serverIP = process.env.TWITCH_IP || nconf.get('TWITCH_IP');
 var filteredCommands = process.env.CONFIG_FILTERED_COMMANDS || nconf.get('CONFIG_FILTERED_COMMANDS');
 var throttledCommands = process.env.CONFIG_THROTTLED_COMMANDS || nconf.get('CONFIG_THROTTLED_COMMANDS');
 
@@ -27,15 +23,6 @@ var ircConfig = {
     // Title of the window of the program
     // Ex: 'Desmume' or 'VBA'
     programName: programName || 'VBA',
-
-    // Ex: irc.twitch.tv or 199.9.252.26
-    server: serverIP || 'irc.twitch.tv',
-    // Your twitch username
-    nick: username,
-    // oauth token from www.twitchapps.com/tmi
-    password: oauth,
-    // name of channel
-    channel: channel,
 
     // If you want to print usernames/commands like in twitchplayspokemon
     printToConsole: true,
